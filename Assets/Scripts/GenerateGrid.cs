@@ -35,7 +35,38 @@ public class GenerateGrid : MonoBehaviour
 
     private void DeleteUnusedTerrain()
     {
-        // TODO
+        for (int x = -length; x < length; x++)
+        {
+            Vector2 xforwardIndex = new Vector2(x + XPlayerLocation, ZPlayerLocation + length + 1);
+            Vector2 xbackIndex = new Vector2(x + XPlayerLocation, ZPlayerLocation - length - 1);
+
+            Vector2 zforwardIndex = new Vector2(XPlayerLocation + length + 1, ZPlayerLocation + x);
+            Vector2 zbackIndex = new Vector2(XPlayerLocation - length - 1, ZPlayerLocation + x);
+
+            if (cubePos.ContainsKey(xforwardIndex))
+            {
+                Destroy(cubePos[xforwardIndex]);
+                cubePos.Remove(xforwardIndex);
+            }
+
+            if (cubePos.ContainsKey(xbackIndex))
+            {
+                Destroy(cubePos[xbackIndex]);
+                cubePos.Remove(xbackIndex);
+            }
+
+            if (cubePos.ContainsKey(zforwardIndex))
+            {
+                Destroy(cubePos[zforwardIndex]);
+                cubePos.Remove(zforwardIndex);
+            }
+
+            if (cubePos.ContainsKey(zbackIndex))
+            {
+                Destroy(cubePos[zbackIndex]);
+                cubePos.Remove(zbackIndex);
+            }
+        }
     }
 
     private void GenerateTerrain()
@@ -50,11 +81,12 @@ public class GenerateGrid : MonoBehaviour
                     z + ZPlayerLocation
                 );
 
-                if (!cubePos.ContainsKey(new Vector2(pos.x, pos.z)))
+                Vector2 index = new Vector2(pos.x, pos.z);
+
+                if (!cubePos.ContainsKey(index))
                 {
                     GameObject cubeInstance = Instantiate(cube, pos, Quaternion.identity, transform);
-
-                    cubePos.Add(new Vector2(pos.x, pos.z), cubeInstance);
+                    cubePos.Add(index, cubeInstance);
                 }
             }
         }
